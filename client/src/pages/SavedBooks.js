@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import {
+ import {
   Container,
   Card,
   Button,
@@ -14,10 +13,7 @@ import { GET_ME } from '..utils/queries';
 import { REMOVE_BOOK } from '../utils/mutations';
 
 
-const SavedBooks = () => { 
-
-  // use this to determine if `useEffect()` hook needs to run again
-  const userDataLength = Object.keys(userData).length;
+const SavedBooks = () => {  
 
   // creates a useQuery to execute get me query
   const {loading, data} = useQuery(GET_ME);
@@ -38,11 +34,12 @@ const SavedBooks = () => {
     }
 
     try {
-      const {data} = await removeBook(bookId);
- 
+      const {data} = await removeBook(bookId); 
 
-      const updatedUser = await data.json();
-      setUserData(updatedUser);
+      if (!data) {
+        throw new Error('something went wrong!');
+      }
+      
       // upon success, remove book's id from localStorage
       removeBookId(bookId);
     } catch (err) {
@@ -51,7 +48,7 @@ const SavedBooks = () => {
   };
 
   // if data isn't here yet, say so
-  if (!userDataLength) {
+  if (loading) {
     return <h2>LOADING...</h2>;
   }
 
