@@ -8,8 +8,7 @@ import {
   Row
 } from 'react-bootstrap';
 
-import Auth from '../utils/auth';
-import { searchGoogleBooks } from '../utils/API';
+import Auth from '../utils/auth'; 
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 import { useMutation } from '@apollo/client';
 import { SAVE_BOOK } from '../utils/mutations';
@@ -25,7 +24,7 @@ const SearchBooks = () => {
 
   // added useMutation hook to execute the SAVE_BOOK mutation in the handleSaveBook() function instead of the saveBook() function imported from the API file
   
-  conat [saveBook, {error}] = useMutation(SAVE_BOOK);
+  const [saveBook, {error}] = useMutation(SAVE_BOOK);
 
   // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
   // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
@@ -42,7 +41,7 @@ const SearchBooks = () => {
     }
 
     try {
-      const response = await searchGoogleBooks(searchInput);
+      const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${searchInput}&key=AIzaSyBZWLmHa9pTBSAAmpe1g9aeGNPQG8hTtzo`);
 
       if (!response.ok) {
         throw new Error('something went wrong!');

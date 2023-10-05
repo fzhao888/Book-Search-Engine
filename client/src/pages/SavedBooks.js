@@ -9,7 +9,7 @@
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 import { useMutation, useQuery } from '@apollo/client';
-import { GET_ME } from '..utils/queries';
+import { GET_ME } from '../utils/queries';
 import { REMOVE_BOOK } from '../utils/mutations';
 
 
@@ -17,10 +17,11 @@ const SavedBooks = () => {
 
   // creates a useQuery to execute get me query
   const {loading, data} = useQuery(GET_ME);
-
+ 
   // loads and saves the query to userData
-  const userData = data?.me || [];
-  
+  const userData = data?.me || {};
+  console.log(userData);
+
   // useMutation hook to remove a book
   const [removeBook, {error}] = useMutation(REMOVE_BOOK);
   
@@ -34,7 +35,11 @@ const SavedBooks = () => {
     }
 
     try {
-      const {data} = await removeBook(bookId); 
+      const {data} = await removeBook(
+        {
+          variables: {bookId}
+        }
+      ); 
 
       if (!data) {
         throw new Error('something went wrong!');
@@ -61,12 +66,12 @@ const SavedBooks = () => {
       </div>
       <Container>
         <h2 className='pt-5'>
-          {userData.savedBooks.length
+          {userData.savedBooks?.length
             ? `Viewing ${userData.savedBooks.length} saved ${userData.savedBooks.length === 1 ? 'book' : 'books'}:`
             : 'You have no saved books!'}
         </h2>
         <Row>
-          {userData.savedBooks.map((book) => {
+          {userData.savedBooks?.map((book) => {
             return (
               <Col md="4">
                 <Card key={book.bookId} border='dark'>
