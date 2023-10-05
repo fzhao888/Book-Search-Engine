@@ -19,8 +19,7 @@ const SavedBooks = () => {
   const {loading, data} = useQuery(GET_ME);
  
   // loads and saves the query to userData
-  const userData = data?.me || {};
-  console.log(userData);
+  const userData = data?.me || {}; 
 
   // useMutation hook to remove a book
   const [removeBook, {error}] = useMutation(REMOVE_BOOK);
